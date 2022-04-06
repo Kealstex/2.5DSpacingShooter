@@ -12,13 +12,14 @@ public class Player : MonoBehaviour
     public void Update()
     {
         transform.Translate(_direction);
+        var x = Mathf.Clamp(transform.position.x, -9f, 9f);
+        var y = Mathf.Clamp(transform.position.y, -3.7f, 0f);
+        transform.position = new Vector3(x, y, 0f);
     }
 
     public void OnMove(InputValue input)
     {
-        var inputVec = input.Get<Vector2>();
-        var xInput = inputVec.x * speed * Time.deltaTime;
-        var yInput = inputVec.y * speed * Time.deltaTime;
-        _direction = new Vector3(xInput, yInput,0 );
+        var inputVec = input.Get<Vector2>() * speed * Time.deltaTime;
+        _direction = new Vector3(inputVec.x, inputVec.y,0 );
     }
 }
