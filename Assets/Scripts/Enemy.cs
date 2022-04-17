@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
 
     [SerializeField] private float speed;
+    [SerializeField] [Range(1,3)] private int damage;
 
     // Update is called once per frame
     void Update(){
@@ -14,10 +15,10 @@ public class Enemy : MonoBehaviour
             TeleportToUp();
     }
 
-    private void OnTriggerEnter(Collider other){
+    private void OnTriggerEnter2D(Collider2D other){
         switch (other.tag){
             case "Player":
-                other.GetComponent<Health>().Damage(5);
+                other.GetComponent<Health>().Damage(damage);
                 Destroy(gameObject);
                 break;
             case "Laser":
