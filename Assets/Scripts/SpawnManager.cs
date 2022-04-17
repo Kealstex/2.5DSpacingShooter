@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
     [SerializeField] private GameObject enemyContainer;
+    [SerializeField] private float spawnTime;
     private bool _stopSpawn = false;
 
     private void Start(){
@@ -18,12 +19,12 @@ public class SpawnManager : MonoBehaviour
     }
 
     private IEnumerator SpawnRoutine(){
-        while (_stopSpawn){
+        while (!_stopSpawn){
             var randomX = Random.Range(-10f, 10f);
             var position = new Vector3(randomX, 7f, 0f);
             Instantiate(enemy, position, Quaternion.identity, enemyContainer.transform);
             
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(spawnTime);
         }
     }
 }
