@@ -10,59 +10,53 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private Transform laserTransform;
     [SerializeField] private float fireRate;
-    private float _nextFire;
-    private Vector2 m_Move;
     
+    private float _nextFire;
+    private Vector2 _moveInput;
+
     // Update is called once per frame
-    public void Update()
-    {
-        Move(m_Move);
+    public void Update(){
+        Move(_moveInput);
         PositionClamp();
     }
 
-    public void OnMove(InputAction.CallbackContext input)
-    {
-        m_Move = input.ReadValue<Vector2>();
+    public void OnMove(InputAction.CallbackContext input){
+        _moveInput = input.ReadValue<Vector2>();
     }
 
-    public void OnFire(InputAction.CallbackContext input)
-    {
+    public void OnFire(InputAction.CallbackContext input){
         if (!(Time.time > _nextFire)) return;
-        
+
         _nextFire = Time.time + fireRate;
         Instantiate(laserPrefab, laserTransform.position, Quaternion.identity);
     }
 
-    private void Move(Vector2 direction)
-    {
-        if(direction.sqrMagnitude < 0.1f)
+    private void Move(Vector2 direction){
+        if (direction.sqrMagnitude < 0.1f)
             return;
         var scaledMoveSpeed = moveSpeed * Time.deltaTime;
         var move = direction * scaledMoveSpeed;
         transform.position += new Vector3(move.x, move.y, 0);
     }
 
-    private void PositionClamp()
-    {
+    private void PositionClamp(){
         VerticalClamp();
         HorizontalTeleport();
     }
 
-    private void VerticalClamp()
-    {
+    private void VerticalClamp(){
         var position = transform.position;
         var y = Mathf.Clamp(position.y, -3.7f, 0f);
         position = new Vector3(position.x, y, 0f);
         transform.position = position;
     }
 
-    private void HorizontalTeleport()
-    {
+    private void HorizontalTeleport(){
         const float horizontalLimit = 11.27f;
         var position = transform.position;
         if (Mathf.Abs(position.x) > horizontalLimit)
             position.Set(-Mathf.Sign(position.x) * horizontalLimit, position.y, position.z);
         transform.position = position;
-    } 
+    }
 
 }
