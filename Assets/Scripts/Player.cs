@@ -8,11 +8,19 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private GameObject laserPrefab;
-    [SerializeField] private Transform laserTransform;
+    [SerializeField] private GameObject tripleLaserPrefab;
+    [SerializeField] private Transform bulletsSpawn;
     [SerializeField] private float fireRate;
-    
+
+    private bool isTrippleShotActive = false;
+
+    private GameObject _bullets;
     private float _nextFire;
     private Vector2 _moveInput;
+
+    public void Start(){
+        _bullets = laserPrefab;
+    }
 
     // Update is called once per frame
     public void Update(){
@@ -28,7 +36,19 @@ public class Player : MonoBehaviour
         if (!(Time.time > _nextFire)) return;
 
         _nextFire = Time.time + fireRate;
-        Instantiate(laserPrefab, laserTransform.position, Quaternion.identity);
+        Instantiate(_bullets, bulletsSpawn.position, Quaternion.identity);
+    }
+
+    public void OnChangeMode(InputAction.CallbackContext input){
+        if (isTrippleShotActive){
+            DisableTripleShot();
+            isTrippleShotActive = false;
+        }
+        else{
+            ActivateTripleShot();
+            isTrippleShotActive = true;
+        }
+            
     }
 
     private void Move(Vector2 direction){
@@ -57,6 +77,15 @@ public class Player : MonoBehaviour
         if (Mathf.Abs(position.x) > horizontalLimit)
             position.Set(-Mathf.Sign(position.x) * horizontalLimit, position.y, position.z);
         transform.position = position;
+    }
+
+
+    public void ActivateTripleShot(){
+        _bullets = tripleLaserPrefab;
+    }
+
+    private void DisableTripleShot(){
+        _bullets = laserPrefab;
     }
 
 }

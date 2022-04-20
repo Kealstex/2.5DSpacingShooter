@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
     }
 
     private void Move(){
-        var move = Vector3.down * Time.deltaTime * speed;
+        var move = Vector2.down * Time.deltaTime * speed;
         transform.Translate(move);
     }
 
