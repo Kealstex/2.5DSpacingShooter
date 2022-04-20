@@ -1,4 +1,5 @@
 
+using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
@@ -11,8 +12,6 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject tripleLaserPrefab;
     [SerializeField] private Transform bulletsSpawn;
     [SerializeField] private float fireRate;
-
-    private bool isTrippleShotActive = false;
 
     private GameObject _bullets;
     private float _nextFire;
@@ -38,17 +37,10 @@ public class Player : MonoBehaviour
         _nextFire = Time.time + fireRate;
         Instantiate(_bullets, bulletsSpawn.position, Quaternion.identity);
     }
-
-    public void OnChangeMode(InputAction.CallbackContext input){
-        if (isTrippleShotActive){
-            DisableTripleShot();
-            isTrippleShotActive = false;
-        }
-        else{
-            ActivateTripleShot();
-            isTrippleShotActive = true;
-        }
-            
+    
+    public void ActivateTripleShot(){
+        _bullets = tripleLaserPrefab;
+        StartCoroutine(DisableTimer(5f));
     }
 
     private void Move(Vector2 direction){
@@ -79,13 +71,13 @@ public class Player : MonoBehaviour
         transform.position = position;
     }
 
-
-    public void ActivateTripleShot(){
-        _bullets = tripleLaserPrefab;
-    }
-
     private void DisableTripleShot(){
         _bullets = laserPrefab;
+    }
+
+    private IEnumerator DisableTimer(float lifetimeSeconds){
+        yield return new WaitForSeconds(lifetimeSeconds);
+        DisableTripleShot();
     }
 
 }
