@@ -12,8 +12,10 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject tripleLaserPrefab;
     [SerializeField] private Transform bulletsSpawn;
     [SerializeField] private float fireRate;
-
+    
+    private float _speedMultiplier = 2f;
     private GameObject _bullets;
+    private bool _hasShield;
     private float _nextFire;
     private Vector2 _moveInput;
 
@@ -40,9 +42,23 @@ public class Player : MonoBehaviour
     
     public void ActivateTripleShot(){
         _bullets = tripleLaserPrefab;
-        StartCoroutine(DisableTimer(5f));
+        StartCoroutine(DisableTripleShot(5f));
     }
 
+    public void IncreaseSpeed(){
+        moveSpeed *= _speedMultiplier;
+        StartCoroutine(DecreaseSpeed(5f));
+    }
+
+    public void ActivateShields(){
+        _hasShield = true;
+        StartCoroutine(DisableShields(5f));
+    }
+
+    public bool HasShields(){
+        return _hasShield;
+    }
+    
     private void Move(Vector2 direction){
         if (direction.sqrMagnitude < 0.1f)
             return;
@@ -70,14 +86,20 @@ public class Player : MonoBehaviour
             position.Set(-Mathf.Sign(position.x) * horizontalLimit, position.y, position.z);
         transform.position = position;
     }
-
-    private void DisableTripleShot(){
+    
+    private IEnumerator DisableTripleShot(float lifetimeSeconds){
+        yield return new WaitForSeconds(lifetimeSeconds);
         _bullets = laserPrefab;
     }
-
-    private IEnumerator DisableTimer(float lifetimeSeconds){
+    private IEnumerator DecreaseSpeed(float lifetimeSeconds){
         yield return new WaitForSeconds(lifetimeSeconds);
-        DisableTripleShot();
+        moveSpeed /= _speedMultiplier;
     }
+
+    private IEnumerator DisableShields(float lifetimeSeconds){
+        yield return new WaitForSeconds(lifetimeSeconds);
+        _hasShield = false;
+    }
+    
 
 }

@@ -7,8 +7,10 @@ using Random = UnityEngine.Random;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
-    [SerializeField] private GameObject tripleShotPowerUp;
     [SerializeField] private GameObject enemyContainer;
+    [SerializeField] private GameObject tripleShotPowerUp;
+    [SerializeField] private GameObject speedPowerUp;
+    [SerializeField] private GameObject shieldPowerUp;
     [SerializeField] private float enemySpawnTime; 
     private bool _stopSpawn = false;
     
@@ -21,6 +23,8 @@ public class SpawnManager : MonoBehaviour
     private void Start(){
         StartCoroutine(SpawnObjectRoutine(enemy, enemySpawnTime, enemyContainer));
         StartCoroutine(SpawnObjectRoutine(tripleShotPowerUp, tripleShotSpawnTime));
+        StartCoroutine(SpawnObjectRoutine(speedPowerUp));
+        StartCoroutine(SpawnObjectRoutine(shieldPowerUp));
     }
 
     public void OnPlayerDeath(){
