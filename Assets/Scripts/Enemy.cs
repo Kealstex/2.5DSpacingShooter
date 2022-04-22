@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,6 +8,12 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private float speed;
     [SerializeField] [Range(1,3)] private int damage;
+
+    private Score _score;
+
+    private void Start(){
+        _score = GameObject.FindWithTag("Score").GetComponent<Score>();
+    }
 
     // Update is called once per frame
     void Update(){
@@ -22,6 +29,7 @@ public class Enemy : MonoBehaviour
                 Destroy(gameObject);
                 break;
             case "Laser":
+                _score.Increase();
                 Destroy(other.gameObject);
                 Destroy(gameObject);
                 break;

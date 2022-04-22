@@ -9,9 +9,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject enemyContainer;
     [SerializeField] private float enemySpawnTime; 
     [SerializeField] private GameObject[] powerUps;
-    private bool _stopSpawn = false;
     
-    private float tripleShotSpawnTime = 7f;
+    private bool _stopSpawn = false;
     
     private float _maxYScreenPosition = 7f;
     private float _minXScreenPosition = -10f;
