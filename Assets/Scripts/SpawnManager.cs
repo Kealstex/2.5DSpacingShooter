@@ -1,6 +1,5 @@
-﻿using System;
+﻿
 using System.Collections;
-using System.Linq.Expressions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,10 +7,8 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
     [SerializeField] private GameObject enemyContainer;
-    [SerializeField] private GameObject tripleShotPowerUp;
-    [SerializeField] private GameObject speedPowerUp;
-    [SerializeField] private GameObject shieldPowerUp;
     [SerializeField] private float enemySpawnTime; 
+    [SerializeField] private GameObject[] powerUps;
     private bool _stopSpawn = false;
     
     private float tripleShotSpawnTime = 7f;
@@ -21,10 +18,8 @@ public class SpawnManager : MonoBehaviour
     private float _maxXScreenPosition = 10f;
 
     private void Start(){
-        StartCoroutine(SpawnObjectRoutine(enemy, enemySpawnTime, enemyContainer));
-        StartCoroutine(SpawnObjectRoutine(tripleShotPowerUp, tripleShotSpawnTime));
-        StartCoroutine(SpawnObjectRoutine(speedPowerUp));
-        StartCoroutine(SpawnObjectRoutine(shieldPowerUp));
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerUpsRoutine());
     }
 
     public void OnPlayerDeath(){
@@ -36,21 +31,23 @@ public class SpawnManager : MonoBehaviour
         return new Vector2(randomX, _maxYScreenPosition);
     }
 
-    private IEnumerator SpawnObjectRoutine(GameObject obj, float spawnTime = 0f, GameObject parent = null ){
+    private IEnumerator SpawnEnemyRoutine(){
         while (!_stopSpawn){
             var position = RandomTopSpawn();
-            
-            var spawnObj = Instantiate(obj, position, Quaternion.identity);
-            
-            if (parent != null){
-                spawnObj.transform.SetParent(parent.transform);
-            }
+            Instantiate(enemy, position, Quaternion.identity, enemyContainer.transform);
+            yield return new WaitForSeconds(enemySpawnTime);
+        }
+    }
 
-            if (spawnTime == 0f){
-                spawnTime = Random.Range(5f, 12f);
-            }
-            
-            yield return new WaitForSeconds(spawnTime);
+    private IEnumerator SpawnPowerUpsRoutine(){
+        while (!_stopSpawn){
+            var powerUpId = Random.Range(0, 3);
+            var powerUp = powerUps[powerUpId];
+            var position = RandomTopSpawn();
+            Instantiate(powerUp, position, Quaternion.identity);
+
+            var nextSpawnTime = Random.Range(5f, 12f);
+            yield return new WaitForSeconds(nextSpawnTime);
         }
     }
 }
