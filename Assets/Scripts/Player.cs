@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject tripleLaserPrefab;
     [SerializeField] private Transform bulletsSpawn;
     [SerializeField] private float fireRate;
+    [SerializeField] private GameObject shield;
     
     private float _speedMultiplier = 2f;
     private GameObject _bullets;
@@ -51,8 +52,8 @@ public class Player : MonoBehaviour
     }
 
     public void ActivateShields(){
+        shield.SetActive(true);
         _hasShield = true;
-        StartCoroutine(DisableShields(5f));
     }
 
     public bool HasShields(){
@@ -96,8 +97,8 @@ public class Player : MonoBehaviour
         moveSpeed /= _speedMultiplier;
     }
 
-    private IEnumerator DisableShields(float lifetimeSeconds){
-        yield return new WaitForSeconds(lifetimeSeconds);
+    public void DisableShields(){
+        shield.SetActive(false);
         _hasShield = false;
     }
     

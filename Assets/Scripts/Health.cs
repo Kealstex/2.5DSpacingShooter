@@ -15,11 +15,14 @@ public class Health : MonoBehaviour
     private bool HasShields(){
         return _player.HasShields();
     }
-    
+
     public void Damage(int damageValue){
-        if (!HasShields()){
-            value -= damageValue;
+        if (HasShields()){
+            _player.DisableShields();
+            return;
         }
+        value -= damageValue;
+
         if (IsDeath()){
             spawnManager.OnPlayerDeath();
             Destroy(gameObject);
