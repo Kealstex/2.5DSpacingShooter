@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,15 @@ public class UIManager : MonoBehaviour
 
     public void ShowGameOver(){
         gameOver.SetActive(true);
+        StartCoroutine(GameOverFlickerRoutine(true));
+    }
+
+    private IEnumerator GameOverFlickerRoutine(bool isActive){
+        while (true){
+            yield return new WaitForSeconds(1f);
+            isActive = !isActive;
+            gameOver.SetActive(isActive);
+        }
     }
 
 }

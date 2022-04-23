@@ -1,14 +1,20 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 public class Score : MonoBehaviour
 {
-    [SerializeField] private UIManager _uiManager;
+    [SerializeField] private UIManager uiManager;
     private int _value=0;
+
+    private void Start(){
+        if (uiManager == null)
+            uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+    }
 
     public void Increase(){
         _value+=10;
-        _uiManager.UpdateScore(_value);
+        uiManager.UpdateScore(_value);
     }
 
     public int Get(){
