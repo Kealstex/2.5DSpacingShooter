@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class Score : MonoBehaviour
 {
-    [SerializeField] private TMP_Text visualizer;
+    [SerializeField] private UIManager _uiManager;
     private int _value=0;
 
     public void Increase(){
         _value+=10;
-        visualizer.text = "Score: " + _value;
+        _uiManager.UpdateScore(_value);
     }
 
     public int Get(){
