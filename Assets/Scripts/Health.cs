@@ -32,6 +32,7 @@ public class Health : MonoBehaviour
 
         if (IsDeath()){
             spawnManager.OnPlayerDeath();
+            uiManager.ShowGameOver();
             Destroy(gameObject);
         }
     }
