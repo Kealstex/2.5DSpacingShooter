@@ -1,7 +1,9 @@
 
+using System;
 using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Vector3 = UnityEngine.Vector3;
 
 public class Player : MonoBehaviour
@@ -13,7 +15,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform bulletsSpawn;
     [SerializeField] private float fireRate;
     [SerializeField] private GameObject shieldsVisualizer;
+    [SerializeField] private PlayerInput inputSystem;
     
+    private InputAction _restartAction;
     private float _speedMultiplier = 2f;
     private GameObject _bullets;
     private bool _hasShield;
@@ -24,6 +28,8 @@ public class Player : MonoBehaviour
 
     public void Start(){
         _bullets = laserPrefab;
+        _restartAction = inputSystem.actions.FindAction("Restart", true);
+        _restartAction.Disable();
     }
 
     // Update is called once per frame
@@ -42,7 +48,21 @@ public class Player : MonoBehaviour
         _nextFire = Time.time + fireRate;
         Instantiate(_bullets, bulletsSpawn.position, Quaternion.identity);
     }
-    
+
+    public void OnRestart(InputAction.CallbackContext input){
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Death(){
+        
+        //Disable all actions , except for restart
+        inputSystem.actions.Disable();
+        _restartAction.Enable();
+        
+        //Disable visualization player, but scripts enabled
+        GetComponent<SpriteRenderer>().sprite = null;
+    }
+
     public void ActivateTripleShot(){
         _bullets = tripleLaserPrefab;
         StartCoroutine(DisableTripleShot(5f));

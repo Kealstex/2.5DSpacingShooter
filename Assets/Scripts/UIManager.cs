@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite[] liveSprites;
     [SerializeField] private Image livesImg;
     [SerializeField] private GameObject gameOver;
+    [SerializeField] private GameObject restartText;
 
     void Start(){
         if (scoreText == null)
@@ -27,6 +28,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowGameOver(){
         gameOver.SetActive(true);
+        restartText.SetActive(true);
         StartCoroutine(GameOverFlickerRoutine(true));
     }
 
@@ -37,5 +39,4 @@ public class UIManager : MonoBehaviour
             gameOver.SetActive(isActive);
         }
     }
-
 }
