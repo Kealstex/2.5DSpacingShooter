@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] [Range(1,3)] private int damage;
 
     private Score _score;
+    private static readonly int OnDeath = Animator.StringToHash("onDeath");
 
     private void Start(){
         _score = GameObject.FindWithTag("Score").GetComponent<Score>();
@@ -26,14 +28,25 @@ public class Enemy : MonoBehaviour
         switch (other.tag){
             case "Player":
                 other.GetComponent<Health>().Damage(damage);
-                Destroy(gameObject);
+                Death();
                 break;
             case "Laser":
-                _score.Increase();
                 Destroy(other.gameObject);
-                Destroy(gameObject);
+                Death();
+                StartCoroutine(DestroyAfterAnim(1.4f));
                 break;
         }
+    }
+
+    private void Death(){
+        _score.Increase();
+        var animator = GetComponent<Animator>();
+        animator.SetTrigger(OnDeath);
+    }
+
+    private IEnumerator DestroyAfterAnim(float animationLifetime){
+        yield return new WaitForSeconds(animationLifetime);
+        Destroy(gameObject);
     }
 
     private void Move(){
