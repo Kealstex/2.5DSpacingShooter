@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
     [SerializeField] private GameObject enemyContainer;
+    [SerializeField] private GameObject asteroid;
     [SerializeField] private float enemySpawnTime; 
     [SerializeField] private GameObject[] powerUps;
     
@@ -19,6 +20,7 @@ public class SpawnManager : MonoBehaviour
     private void Start(){
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpsRoutine());
+        StartCoroutine(SpawnAsteroidsRoutine());
     }
 
     public void OnPlayerDeath(){
@@ -44,6 +46,21 @@ public class SpawnManager : MonoBehaviour
             var powerUp = powerUps[powerUpId];
             var position = RandomTopSpawn();
             Instantiate(powerUp, position, Quaternion.identity);
+
+            var nextSpawnTime = Random.Range(5f, 12f);
+            yield return new WaitForSeconds(nextSpawnTime);
+        }
+    }
+
+    private IEnumerator SpawnAsteroidsRoutine(){
+        while (!_stopSpawn){
+            var position = RandomTopSpawn();
+            
+            Quaternion quaternion = default;
+            var randomAngle = Random.Range(0, 180);
+            quaternion.eulerAngles = Vector3.forward * randomAngle;
+            
+            Instantiate(asteroid, position, Quaternion.identity);
 
             var nextSpawnTime = Random.Range(5f, 12f);
             yield return new WaitForSeconds(nextSpawnTime);
