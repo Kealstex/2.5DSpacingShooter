@@ -33,7 +33,6 @@ public class Enemy : MonoBehaviour
             case "Laser":
                 Destroy(other.gameObject);
                 Death();
-                StartCoroutine(DestroyAfterAnim(1.4f));
                 break;
         }
     }
@@ -42,6 +41,7 @@ public class Enemy : MonoBehaviour
         _score.Increase();
         var animator = GetComponent<Animator>();
         animator.SetTrigger(OnDeath);
+        StartCoroutine(DestroyAfterAnim(1.4f));
     }
 
     private IEnumerator DestroyAfterAnim(float animationLifetime){

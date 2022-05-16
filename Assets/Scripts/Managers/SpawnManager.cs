@@ -18,6 +18,10 @@ public class SpawnManager : MonoBehaviour
     private float _maxXScreenPosition = 10f;
 
     private void Start(){
+        StartSpawning();
+    }
+
+    public void StartSpawning(){
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpsRoutine());
         StartCoroutine(SpawnAsteroidsRoutine());

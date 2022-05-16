@@ -1,9 +1,10 @@
 
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 
 public class Player : MonoBehaviour
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float fireRate;
     [SerializeField] private GameObject shieldsVisualizer;
     [SerializeField] private PlayerInput inputSystem;
+    private List<GameObjectState> damageFireActivated = new List<GameObjectState>();
     
     private InputAction _restartAction;
     private float _speedMultiplier = 2f;
@@ -24,12 +26,20 @@ public class Player : MonoBehaviour
 
     private float _nextFire;
     private Vector2 _moveInput;
-    
+
 
     public void Start(){
         _bullets = laserPrefab;
+        
         _restartAction = inputSystem.actions.FindAction("Restart", true);
         _restartAction.Disable();
+        
+        var hurtFireGameobjects =  GameObject.FindGameObjectsWithTag("HurtFire");
+        for (var ind=0; ind < hurtFireGameobjects.Length; ind++){
+            var hurtFire = hurtFireGameobjects[ind];
+            damageFireActivated.Add(new GameObjectState(hurtFire));
+            hurtFire.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -59,8 +69,7 @@ public class Player : MonoBehaviour
         inputSystem.actions.Disable();
         _restartAction.Enable();
         
-        //Disable visualization player, but scripts enabled
-        GetComponent<SpriteRenderer>().sprite = null;
+        DisablePlayerVisualization();
     }
 
     public void ActivateTripleShot(){
@@ -78,8 +87,21 @@ public class Player : MonoBehaviour
         _hasShield = true;
     }
 
+    public void DisableShields(){
+        shieldsVisualizer.SetActive(false);
+        _hasShield = false;
+    }
+
     public bool HasShields(){
         return _hasShield;
+    }
+
+    public void VisualizeDamageFire(){
+        var activateFireInd = Random.Range(0, 2);
+        if (damageFireActivated[activateFireInd].isActivated){
+            activateFireInd = activateFireInd == 0 ? 1 : 0;
+        }
+        damageFireActivated[activateFireInd].SetActive(true);
     }
     
     private void Move(Vector2 direction){
@@ -89,6 +111,7 @@ public class Player : MonoBehaviour
         var move = direction * scaledMoveSpeed;
         transform.position += new Vector3(move.x, move.y, 0);
     }
+    
 
     private void PositionClamp(){
         VerticalClamp();
@@ -119,9 +142,12 @@ public class Player : MonoBehaviour
         moveSpeed /= _speedMultiplier;
     }
 
-    public void DisableShields(){
-        shieldsVisualizer.SetActive(false);
-        _hasShield = false;
+    private void DisablePlayerVisualization(){
+        GetComponent<SpriteRenderer>().sprite = null;
+        foreach (var hurtFire in damageFireActivated){
+            hurtFire.SetActive(false);
+        }
+        GameObject.Find("Thruster").SetActive(false);
     }
     
 

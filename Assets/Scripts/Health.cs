@@ -26,6 +26,7 @@ public class Health : MonoBehaviour
             _player.DisableShields();
             return;
         }
+        _player.VisualizeDamageFire();
         
         value -= damageValue;
         uiManager.UpdateLives(value);
