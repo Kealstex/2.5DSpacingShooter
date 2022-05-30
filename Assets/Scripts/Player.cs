@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float fireRate;
     [SerializeField] private GameObject shieldsVisualizer;
     [SerializeField] private PlayerInput inputSystem;
+    [SerializeField] private AudioManager audioManager;
     private List<GameObjectState> damageFireActivated = new List<GameObjectState>();
     
     private InputAction _restartAction;
@@ -57,6 +59,8 @@ public class Player : MonoBehaviour
 
         _nextFire = Time.time + fireRate;
         Instantiate(_bullets, bulletsSpawn.position, Quaternion.identity);
+        
+        audioManager.LaserPlay();
     }
 
     public void OnRestart(InputAction.CallbackContext input){
