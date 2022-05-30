@@ -74,6 +74,7 @@ public class Player : MonoBehaviour
         _restartAction.Enable();
         
         DisablePlayerVisualization();
+        audioManager.ExplosionPlay();
     }
 
     public void ActivateTripleShot(){

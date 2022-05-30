@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections;
+using Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -38,9 +39,10 @@ public class Enemy : MonoBehaviour
     }
 
     private void Death(){
-        _score.Increase();
+        // _score.Increase();
         var animator = GetComponent<Animator>();
         animator.SetTrigger(OnDeath);
+        GlobalEventManager.SendEnemyKilled();
         StartCoroutine(DestroyAfterAnim(1.4f));
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Managers;
 using TMPro;
 using UnityEngine;
 
@@ -8,16 +9,19 @@ public class Score : MonoBehaviour
     private int _value=0;
 
     private void Start(){
+        
+        GlobalEventManager.OnEnemyKilled += Increase;
+        
         if (uiManager == null)
             uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
     }
 
-    public void Increase(){
+    private void Increase(){
         _value+=10;
         uiManager.UpdateScore(_value);
     }
 
-    public int Get(){
-        return _value;
+    private void OnDestroy(){
+        GlobalEventManager.OnEnemyKilled -= Increase;
     }
 }
