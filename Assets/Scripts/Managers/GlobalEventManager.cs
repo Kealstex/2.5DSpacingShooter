@@ -1,13 +1,13 @@
-﻿using System;
+﻿using UnityEngine.Events;
 
 namespace Managers
 {
     public class GlobalEventManager
     {
-        public static event Action OnEnemyKilled;
+        public static UnityEvent OnEnemyKilled = new UnityEvent();
 
         public static void SendEnemyKilled(){
-            OnEnemyKilled?.Invoke();
+            OnEnemyKilled.Invoke();
         }
     }
 }
