@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Managers
 {
@@ -8,12 +9,18 @@ namespace Managers
         [SerializeField] private AudioSource laser;
         [SerializeField] private AudioSource explosion;
         [SerializeField] private AudioSource powerUp;
-        
+
+
+        private void Start(){
+            GlobalEventManager.OnPlayerKilled.AddListener(ExplosionPlay);
+            GlobalEventManager.OnEnemyKilled.AddListener(ExplosionPlay);
+        }
+
         public void LaserPlay(){
             laser.Play();
         }
 
-        public void ExplosionPlay(){
+        private void ExplosionPlay(){
             explosion.Play();
         }
 

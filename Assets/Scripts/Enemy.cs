@@ -39,7 +39,6 @@ public class Enemy : MonoBehaviour
     }
 
     private void Death(){
-        // _score.Increase();
         var animator = GetComponent<Animator>();
         animator.SetTrigger(OnDeath);
         GlobalEventManager.SendEnemyKilled();
