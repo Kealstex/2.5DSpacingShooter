@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 
 public class Asteroid : MonoBehaviour
@@ -12,10 +13,11 @@ public class Asteroid : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other){
-        if (other.tag == "Laser"){
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
+        if (!other.CompareTag("Laser")) return;
+        
+        Instantiate(explosion, transform.position, Quaternion.identity);
+        GlobalEventManager.SendAsteroidDestroyed();
+        Destroy(gameObject);
     }
 
     private void Rotating(){

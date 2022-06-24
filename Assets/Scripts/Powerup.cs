@@ -1,5 +1,6 @@
 
 using System;
+using Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -46,7 +47,8 @@ public class Powerup : MonoBehaviour
                     other.GetComponent<Player>().ActivateShields();
                     break;
             }
-
+            
+            GlobalEventManager.SendPowerUpGot();
             Destroy(gameObject);
         }
     }

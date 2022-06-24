@@ -14,6 +14,8 @@ namespace Managers
         private void Start(){
             GlobalEventManager.OnPlayerKilled.AddListener(ExplosionPlay);
             GlobalEventManager.OnEnemyKilled.AddListener(ExplosionPlay);
+            GlobalEventManager.OnAsteroidDestroyed.AddListener(ExplosionPlay);
+            GlobalEventManager.OnPowerUpGot.AddListener(PowerUpPlay);
         }
 
         public void LaserPlay(){
@@ -24,7 +26,7 @@ namespace Managers
             explosion.Play();
         }
 
-        public void PowerUpPlay(){
+        private void PowerUpPlay(){
             powerUp.Play();
         }
     }

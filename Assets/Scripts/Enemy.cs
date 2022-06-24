@@ -11,15 +11,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] [Range(1,3)] private int damage;
 
-    private Score _score;
     private static readonly int OnDeath = Animator.StringToHash("onDeath");
 
-    private void Start(){
-        _score = GameObject.FindWithTag("Score").GetComponent<Score>();
-    }
-
     // Update is called once per frame
-    void Update(){
+    private void Update(){
         Move();
         if (transform.position.y < -5f)
             TeleportToUp();
@@ -42,12 +37,7 @@ public class Enemy : MonoBehaviour
         var animator = GetComponent<Animator>();
         animator.SetTrigger(OnDeath);
         GlobalEventManager.SendEnemyKilled();
-        StartCoroutine(DestroyAfterAnim(1.4f));
-    }
-
-    private IEnumerator DestroyAfterAnim(float animationLifetime){
-        yield return new WaitForSeconds(animationLifetime);
-        Destroy(gameObject);
+        Destroy(gameObject,1.4f );
     }
 
     private void Move(){
